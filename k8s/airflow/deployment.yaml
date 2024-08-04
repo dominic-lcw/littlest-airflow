@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: airflow-webserver
-  namespace: airflow-example
+  namespace: airflow
 spec:
   replicas: 1
   template:
@@ -59,7 +59,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: airflow-scheduler
-  namespace: airflow-example
+  namespace: airflow
 spec:
   replicas: 1
   template:

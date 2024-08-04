@@ -27,9 +27,17 @@ docker run -d -p 8080:8080 airflow scheduler
 ```
 -d is to run in daemon mode
 
-# Creating a Priate Cloud
+# Kubernetes
+## Creating a Cluster
 Reference: https://docs.aws.amazon.com/eks/latest/userguide/creating-a-vpc.html
 ```
+eksctl create cluster \
+--name airflow-cluster \
+--version 1.29 \
+--region ap-southeast-2 \
+--nodegroup-name linux-nodes \ 
+--node-type t2.micro \
+--nodes 2
 ```
 
 

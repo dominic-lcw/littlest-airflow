@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airflow-webserver
+  namespace: airflow-example
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: airflow-webserver
+    spec:
+      serviceAccountName: airflow
+      containers:
+      - name: webserver
+        image: lcheuk209/airflow:latest
+        imagePullPolicy: Always
+        ports:
+        - name: webserver
+          containerPort: 8080
+        args: ["webserver"]
+        env:
+        - name: AIRFLOW_KUBE_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: SQL_ALCHEMY_CONN
+          valueFrom:
+            secretKeyRef:
+              name: airflow-secrets
+              key: sql_alchemy_conn
+        volumeMounts:
+        - name: airflow-configmap
+          mountPath: /root/airflow/airflow.cfg
+          subPath: airflow.cfg
+        - name: airflow-dags
+          mountPath: /root/airflow/dags
+        - name: airflow-logs
+          mountPath: /root/airflow/logs
+      volumes:
+      - name: airflow-dags
+        persistentVolumeClaim:
+          claimName: airflow-dags
+      - name: airflow-dags-fake
+        emptyDir: {}
+      - name: airflow-dags-git
+        emptyDir: {}
+      - name: airflow-logs
+        persistentVolumeClaim:
+          claimName: airflow-logs
+      - name: airflow-configmap
+        configMap:
+          name: airflow-configmap
+  selector:
+    matchLabels:
+      name: airflow-webserver
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airflow-scheduler
+  namespace: airflow-example
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: airflow-scheduler
+    spec:
+      serviceAccountName: airflow
+      containers:
+      - name: scheduler
+        image: lcheuk209/airflow:latest
+        imagePullPolicy: Always
+        args: ["scheduler"]
+        env:
+        - name: AIRFLOW_KUBE_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: SQL_ALCHEMY_CONN
+          valueFrom:
+            secretKeyRef:
+              name: airflow-secrets
+              key: sql_alchemy_conn
+        volumeMounts:
+        - name: airflow-configmap
+          mountPath: /root/airflow/airflow.cfg
+          subPath: airflow.cfg
+        - name: airflow-dags
+          mountPath: /root/airflow/dags
+        - name: airflow-logs
+          mountPath: /root/airflow/logs
+      volumes:
+      - name: airflow-dags
+        persistentVolumeClaim:
+          claimName: airflow-dags
+      - name: airflow-dags-fake
+        emptyDir: {}
+      - name: airflow-dags-git
+        emptyDir: {}
+      - name: airflow-logs
+        persistentVolumeClaim:
+          claimName: airflow-logs
+      - name: airflow-configmap
+        configMap:
+          name: airflow-configmap
+  selector:
+    matchLabels:
+      name: airflow-scheduler

@@ -1,0 +1,13 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Airflow Logs
+airflow/logs/*
+
+# Airflow SQLite DB
+*.db
+
+# Airflow PID
+*.pid

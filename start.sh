@@ -15,8 +15,8 @@ airflow users create \
     --role Admin \
     --email spiderman@superhero.org
 
-# Start the Airflow webserver
-airflow webserver --port 8080 &
+# # Start the Airflow webserver
+# airflow webserver --port 8080 &
 
-# Start the Airflow scheduler
-airflow scheduler
+# # # Start the Airflow scheduler
+# airflow scheduler &

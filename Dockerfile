@@ -9,5 +9,5 @@ RUN pip install -r requirements.txt
 
 # Customized airflow setup
 ENV AIRFLOW_HOME=/home/littlest-airflow \
-  PYTHONPATH=/home/littlest-airflow/ltaf
+  PYTHONPATH=/home/littlest-airflow
 COPY . .

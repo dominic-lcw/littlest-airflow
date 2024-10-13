@@ -13,11 +13,12 @@ def get_spot():
             SELECT * FROM read_json('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
 
             -- sql
-            FROM binance_spot;
+            FROM binance_spot
+            SELECT *, STRFTIME(CURRENT_TIMESTAMP, '%Y-%m-%d %H:%M:%S') AS snapped_time;
         """
     ))
 
-    logging.info("Created table binance_spot")
+    logging.info("Created table binance_spot")  
 
 if __name__ == "__main__":
     print(get_spot())

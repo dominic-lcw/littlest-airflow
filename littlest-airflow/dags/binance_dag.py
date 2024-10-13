@@ -17,7 +17,7 @@ dag = DAG(
     'binance_dag',
     default_args=default_args,
     description='Hit binance API and store data.',
-    schedule_interval=timedelta(days=1),
+    schedule_interval="* * * * *", # Run every minute
     catchup = False
 )
 

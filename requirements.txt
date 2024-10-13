@@ -1,9 +1,2 @@
 # airflow
-apache-airflow==2.10.2
-
-# postgres-db
-psycopg2-binary
-
-# airflow-required
-numpy
-pandas
+apache-airflow[postgres,celery]==2.10.2

@@ -8,5 +8,6 @@ COPY ../requirements.txt .
 RUN pip install -r requirements.txt
 
 # Customized airflow setup
-ENV AIRFLOW_HOME=/home/littlest-airflow 
+ENV AIRFLOW_HOME=/home/littlest-airflow \
+  PYTHONPATH=/home/littlest-airflow
 COPY . .

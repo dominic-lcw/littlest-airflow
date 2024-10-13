@@ -5,6 +5,8 @@ services:
     command: [ "airflow", "db", "migrate" ]
     depends_on:
       - db
+    volumes:
+      - airflow-logs:/home/littlest-airflow/logs
 
   webserver:
     image: littlest-airflow:latest
@@ -14,6 +16,8 @@ services:
       - "8080:8080"
     depends_on:
       - airflow_init
+    volumes:
+      - airflow-logs:/home/littlest-airflow/logs
 
   scheduler:
     image: littlest-airflow:latest
@@ -21,6 +25,8 @@ services:
     container_name: scheduler
     depends_on:
       - airflow_init
+    volumes:
+      - airflow-logs:/home/littlest-airflow/logs
 
   worker:
     image: littlest-airflow:latest
@@ -28,11 +34,15 @@ services:
     container_name: worker_1
     depends_on:
       - db
+    volumes:
+      - airflow-logs:/home/littlest-airflow/logs
 
   flower:
     image: littlest-airflow:latest
     command: [ "airflow", "celery", "flower" ]
     container_name: flower
+    volumes:
+      - airflow-logs:/home/littlest-airflow/logs
     ports:
       - "5555:5555"
     depends_on:
@@ -56,7 +66,9 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+
 volumes:
   postgres-data:
+  airflow-logs:
 
 

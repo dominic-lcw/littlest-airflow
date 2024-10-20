@@ -34,7 +34,11 @@ def get_spot():
                 SELECT * FROM binance_spot LIMIT 0;
 
             -- sql
-            INSERT INTO pg.btc_spot 
+            DELETE FROM pg.btc_spot WHERE
+                snapped_time = (SELECT MAX(snapped_time) FROM binance_spot);
+                
+            -- sql
+            INSERT INTO pg.btc_spot (symbol, price, snapped_time)
             SELECT * FROM binance_spot;
         """
     )

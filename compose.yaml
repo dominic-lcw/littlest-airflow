@@ -2,7 +2,7 @@ services:
   airflow_init:
     image: littlest-airflow:latest
     container_name: airflow-init
-    command: [ "airflow", "db", "migrate" ]
+    command: ["airflow", "db", "migrate"]
     depends_on:
       - db
     volumes:
@@ -10,7 +10,7 @@ services:
 
   webserver:
     image: littlest-airflow:latest
-    command: [ "airflow", "webserver" ]
+    command: ["airflow", "webserver"]
     container_name: webserver
     ports:
       - "8080:8080"
@@ -21,7 +21,7 @@ services:
 
   scheduler:
     image: littlest-airflow:latest
-    command: [ "airflow", "scheduler" ]
+    command: ["airflow", "scheduler"]
     container_name: scheduler
     depends_on:
       - airflow_init
@@ -30,7 +30,7 @@ services:
 
   worker:
     image: littlest-airflow:latest
-    command: [ "airflow", "celery", "worker" ]
+    command: ["airflow", "celery", "worker"]
     container_name: worker_1
     depends_on:
       - db
@@ -39,7 +39,7 @@ services:
 
   flower:
     image: littlest-airflow:latest
-    command: [ "airflow", "celery", "flower" ]
+    command: ["airflow", "celery", "flower"]
     container_name: flower
     volumes:
       - airflow-logs:/home/littlest-airflow/logs
@@ -60,6 +60,17 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+  pgduckdb:
+    image: pgduckdb/pgduckdb:16-main
+    ports:
+      - "5432:5433" # Use a second port
+    environment:
+      PORT: 5433
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: duckdb
+    volumes:
+      - pgduckdb-data:/var/lib/postgresql/data
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq-server
@@ -69,6 +80,5 @@ services:
 
 volumes:
   postgres-data:
+  pgduckdb-data:
   airflow-logs:
-
-

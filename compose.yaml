@@ -62,8 +62,9 @@ services:
 
   pgduckdb:
     image: pgduckdb/pgduckdb:16-main
+    container_name: postgres-duckdb-server
     ports:
-      - "5432:5433" # Use a second port
+      - "5433:5432" # Use a second port
     environment:
       PORT: 5433
       POSTGRES_USER: postgres

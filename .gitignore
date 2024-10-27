@@ -3,10 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# VSCode specific
 .vscode/
+*.code-workspace
 
 # Airflow Logs
-airflow/logs/*
+logs/
 
 # Airflow SQLite DB
 *.db

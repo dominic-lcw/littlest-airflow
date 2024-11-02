@@ -22,14 +22,18 @@ dag = DAG(
 )
 
 task1 = PythonOperator(
-    task_id='start',
+    task_id='cache_v1',
     python_callable=get_spot,
+    op_args=[1],
     dag=dag,
 )
 
-task2 = EmptyOperator(
-    task_id='end',
+task2 = PythonOperator(
+    task_id='cache_v2',
+    python_callable=get_spot,
+    op_args=[2],
     dag=dag,
 )
 
-task1 >> task2
+task1
+task2

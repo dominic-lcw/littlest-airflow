@@ -4,7 +4,26 @@ logging.basicConfig(level=logging.INFO)
 
 __all__ = ['get_spot']
 
-def get_spot():
+# TODO: this functiono can be moved to util.
+def connect(
+        host: str = "localhost",
+        port: int = 5432,
+        user: str = "postgres",
+        password: str = "postgres",
+        schema: str = "public"):
+    
+    connection_string = f"dbname=postgres host={host} port={port} user={user} password={password} "
+    duckdb.sql(
+        f"""
+            INSTALL postgres;
+            LOAD postgres;
+            ATTACH '{connection_string}' AS pg (TYPE POSTGRES, SCHEMA '{schema}');
+        """
+    )
+    logging.info("Connected to postgres")
+
+
+def get_spot(version: int = 1):
 
     logging.info(duckdb.sql(
         """
@@ -21,14 +40,16 @@ def get_spot():
 
     logging.info("Created table binance_spot")  
 
-    # TODO: postgres attach shall be moved to utils
+    match version:
+        case 1:
+            connect(host = "postgres-server", schema = "public_cache")
+        case 2:
+            connect(host = "postgres-duckdb-server", port = 5433, schema = "public_cache")
+        case _:
+            raise ValueError("Invalid version")
+        
     duckdb.sql(
         """
-            -- sql
-            INSTALL postgres;
-            LOAD postgres;
-            ATTACH 'dbname=postgres user=postgres password=postgres host=postgres-server port=5432' AS pg (TYPE POSTGRES, SCHEMA 'public_cache');
-
             -- sql
             CREATE TABLE IF NOT EXISTS pg.btc_spot AS
                 SELECT * FROM binance_spot LIMIT 0;

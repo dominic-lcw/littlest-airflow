@@ -1,0 +1,6 @@
+apache-airflow==3.0.4
+pandas
+numpy
+
+asyncpg
+psycopg2-binary

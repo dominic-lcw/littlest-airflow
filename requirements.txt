@@ -1,6 +1,0 @@
-# airflow
-apache-airflow[postgres,celery]==2.10.2
-
-# utils
-duckdb==1.1.1
-graphviz

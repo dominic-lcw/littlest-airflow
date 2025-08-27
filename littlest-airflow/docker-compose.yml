@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  airflow:
+    image: apache/airflow:2.5.0
+    container_name: littlest_airflow
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=sqlite:////usr/local/airflow/airflow.db
+      - AIRFLOW__WEBSERVER__SECRET_KEY=your_secret_key
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    volumes:
+      - ./src/dags:/usr/local/airflow/dags
+      - ./src/plugins:/usr/local/airflow/plugins
+      - ./src/config/airflow.cfg:/usr/local/airflow/airflow.cfg
+    ports:
+      - "8080:8080"
+    command: webserver
+    restart: always
+
+  scheduler:
+    image: apache/airflow:2.5.0
+    container_name: littlest_airflow_scheduler
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=sqlite:////usr/local/airflow/airflow.db
+    volumes:
+      - ./src/dags:/usr/local/airflow/dags
+      - ./src/plugins:/usr/local/airflow/plugins
+      - ./src/config/airflow.cfg:/usr/local/airflow/airflow.cfg
+    command: scheduler
+    restart: always
+
+networks:
+  default:
+    driver: bridge
